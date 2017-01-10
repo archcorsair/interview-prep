@@ -1,27 +1,20 @@
 timeString = '12:32 34:01 15:23 9:27 55:22 25:56'
 
 function timeStringApplication(times) {
-  // Separate into individual times
-  const newTimes = times.split(' ')
-  // Count and combine times
-  const result = newTimes.map((time) => {
+  const seconds = times.split(' ').map((time) => {
     return time.split(':')
-  }).reduce((a, b) => {
-    console.log('b: ', b)
-    a += parseInt(b[0] * 60) + parseInt(b[1])
-    return a
+  }).reduce((secs, entry) => {
+    return secs + parseInt(entry[0] * 60) + parseInt(entry[1])
   }, 0)
-  return decimalToTime(result)
+  const miliseconds = 1000 * seconds
+  return decimalToTime(new Date(miliseconds))
 }
 
-function decimalToTime(secs) {
-  return new Date(secs*1000).toUTCString().split(" ")[4]
+function decimalToTime(date) {
+  return date.toUTCString().split(" ")[4]
 }
 
 function assert(expected, error) {
-  if (!expected) {
-    throw new Error(error)
-  }
-  return console.log(true)
+  if (!expected) throw new Error(error)
 }
-assert(timeStringApplication(timeString) === '02:32:41', 'Time was not correct')
+console.log(assert(timeStringApplication(timeString) === '02:32:41', 'Time was not correct'))
